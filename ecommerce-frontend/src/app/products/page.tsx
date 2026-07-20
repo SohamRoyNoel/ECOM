@@ -16,8 +16,6 @@ export default function ProductsPage() {
   const { token, user, isLoading: authLoading, logout } = useAuth();
   const router = useRouter();
 
-  // ---- filter/search/page-size controls (each just its own useState -
-  // there's no need to share these outside this page) ----
   const [searchInput, setSearchInput] = useState('');
   const debouncedSearch = useDebouncedValue(searchInput, 400);
 
@@ -27,7 +25,6 @@ export default function ProductsPage() {
   const [limitInput, setLimitInput] = useState(String(DEFAULT_LIMIT));
   const debouncedLimit = useDebouncedValue(limitInput, 500);
 
-  // ---- catalog data ----
   const [products, setProducts] = useState<Product[]>([]);
   const [cursor, setCursor] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(true);
@@ -36,28 +33,20 @@ export default function ProductsPage() {
   const [error, setError] = useState<string | null>(null);
 
   const sentinelRef = useRef<HTMLDivElement | null>(null);
-  // Cursor changes on every page load, but the infinite-scroll observer
-  // effect shouldn't re-subscribe every time - it reads the latest cursor
-  // via this ref instead of taking it as a dependency.
   const cursorRef = useRef<string | null>(null);
   cursorRef.current = cursor;
 
-  // Redirect unauthenticated visitors. This runs after AuthProvider's own
-  // localStorage check finishes (authLoading), so it doesn't briefly bounce
-  // someone who's actually logged in.
   useEffect(() => {
     if (!authLoading && !token) {
       router.replace('/login');
     }
   }, [authLoading, token, router]);
 
-  // Category list for the filter dropdown - fetched once auth is ready.
   useEffect(() => {
     if (!token) return;
     apiFetch<{ data: Category[] }>('/categories', { token })
       .then((res) => setCategories(res.data))
       .catch(() => {
-        // Non-critical: the page still works without the filter populated.
       });
   }, [token]);
 
@@ -65,10 +54,7 @@ export default function ProductsPage() {
     logout('expired');
   }, [logout]);
 
-  /**
-   * Fetches one page. `reset: true` starts a fresh list (new search/filter/
-   * page size); `reset: false` appends the next page using the current cursor.
-   */
+
   const fetchPage = useCallback(
     async (reset: boolean) => {
       if (!token) return;
@@ -107,21 +93,14 @@ export default function ProductsPage() {
     [token, debouncedSearch, categoryId, debouncedLimit, handleUnauthorized],
   );
 
-  // Whenever search text, category, or page size (settled/debounced values)
-  // change, throw away the current list and start over from page one.
   useEffect(() => {
     if (!token) return;
     setProducts([]);
     setCursor(null);
     setHasMore(true);
     fetchPage(true);
-    // fetchPage is intentionally the only other dependency; it already
-    // captures debouncedSearch/categoryId/debouncedLimit/token internally.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, debouncedSearch, categoryId, debouncedLimit]);
 
-  // Infinite scroll: observe a sentinel element at the bottom of the list;
-  // load the next page whenever it scrolls into view.
   useEffect(() => {
     const node = sentinelRef.current;
     if (!node) return;
@@ -204,9 +183,6 @@ export default function ProductsPage() {
 
       <ul className="product-list">
         {products.map((product, index) => (
-          // Sponsored items can repeat across pages (rotated from a small
-          // pool), so `id` alone isn't a unique React key - combine with
-          // the item's position in the loaded list instead.
           <ProductCard key={`${product.id}-${index}`} product={product} />
         ))}
       </ul>

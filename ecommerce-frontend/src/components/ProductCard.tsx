@@ -6,10 +6,6 @@ export default function ProductCard({ product }: { product: Product }) {
       {product.isSponsored && <span className="badge">Sponsored</span>}
 
       {product.imageUrl && (
-        // Plain <img>, not next/image: this is a simple demo app and using
-        // next/image here would only add remote-pattern config for no
-        // real benefit (no responsive/optimized delivery requirement).
-        // eslint-disable-next-line @next/next/no-img-element
         <img src={product.imageUrl} alt={product.name} className="product-image" loading="lazy" />
       )}
 
