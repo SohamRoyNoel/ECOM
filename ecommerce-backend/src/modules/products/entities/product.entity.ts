@@ -54,4 +54,13 @@ export class Product {
 
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
   updatedAt!: Date;
+
+  @Column({
+    name: 'search_vector',
+    type: 'tsvector',
+    select: false,
+    insert: false,
+    update: false,
+  })
+  searchVector!: string;
 }

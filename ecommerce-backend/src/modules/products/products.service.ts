@@ -7,12 +7,15 @@ import { ProductListResponse } from '../../common/interfaces/productListResponse
 import { QueryProductsDto } from './dto/query-products.dto';
 import { decodeBrowseCursor, decodeSearchCursor, encodeBrowseCursor, encodeSearchCursor } from '../../common/utils/cursor.util';
 import { CONSTANTS } from '../../common/CONSTANTS';
+import { planSponsoredPage } from '../../common/utils/sponsored-slot.util';
+import { SponsoredService } from '../sponsored/sponsored.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectDataSource() private readonly dataSource: DataSource,
     @InjectRepository(Product) private readonly productRepository: Repository<Product>,
+    private readonly sponsoredService: SponsoredService,
   ) {}
 
   async findById(id: string): Promise<ProductView> {
@@ -29,7 +32,8 @@ export class ProductsService {
   async findPage(dto: QueryProductsDto): Promise<ProductListResponse> {
     const limit = dto.limit ?? 20;
     const query = dto.q?.trim();
-        if (query) {
+    if (query) {
+      // EXclude Sponsor HEre
       return this.findSearchPage(query, dto.categoryId, limit, dto.cursor);
     }
     return this.findBrowsePage(dto.categoryId, limit, dto.cursor);
@@ -147,6 +151,46 @@ export class ProductsService {
   const hasMore = products.length > limit;
   const organicProducts = products.slice(0, limit);
   const data: ProductView[] = organicProducts.map((p) => this.toProductView(p));
+
+  if (organicProducts.length > 0) {
+    const plan = planSponsoredPage(organicOffset, data.length);
+    const slotNumbers = plan.layout
+      .filter((s): s is { type: 'sponsored'; slotNumber: number } => s.type === 'sponsored')
+      .map((s) => s.slotNumber);
+
+    if (slotNumbers.length > 0) {
+      const sponsoredMap = await this.sponsoredService.getManyForSlots(slotNumbers);
+      const merged: ProductView[] = [];
+      let organicCursor = 0;
+      for (const slot of plan.layout) {
+        if (slot.type === 'organic') {
+          merged.push(data[organicCursor]);
+          organicCursor += 1;
+        } else {
+          const sponsored = sponsoredMap.get(slot.slotNumber);
+          if (sponsored) {
+            merged.push({
+              id: sponsored.id,
+              name: sponsored.name,
+              description: sponsored.description,
+              sku: '',
+              categoryId: sponsored.categoryId,
+              categoryName: '',
+              price: sponsored.price,
+              currency: sponsored.currency,
+              stockQuantity: 0,
+              imageUrl: sponsored.imageUrl,
+              createdAt: new Date(0),
+              isSponsored: true,
+              sponsoredLabel: 'Sponsored',
+            });
+          }
+        }
+      }
+      data.length = 0;
+      data.push(...merged);
+    }
+  }
 
   const lastOrganicId =
     organicProducts.length > 0 ? organicProducts[organicProducts.length - 1].id : lastId;

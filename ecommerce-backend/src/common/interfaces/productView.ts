@@ -10,4 +10,7 @@ export interface ProductView {
   stockQuantity: number;
   imageUrl: string | null;
   createdAt: Date;
+  isSponsored?: boolean;
+  sponsoredLabel?: 'Sponsored';
+  relevance?: { score: number; matchType: 'full_text' | 'fuzzy_trigram' };
 }

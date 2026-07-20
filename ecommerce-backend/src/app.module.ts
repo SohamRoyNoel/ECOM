@@ -15,6 +15,7 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { ProductsModule } from './modules/products/products.module';
+import { SponsoredModule } from './modules/sponsored/sponsored.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { ProductsModule } from './modules/products/products.module';
     HealthModule,
     CategoriesModule,
     ProductsModule,
+    SponsoredModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },
