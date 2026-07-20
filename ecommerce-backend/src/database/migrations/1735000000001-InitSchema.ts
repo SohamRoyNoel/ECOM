@@ -23,9 +23,25 @@ export class InitSchema1735000000001 implements MigrationInterface {
     `);
     await queryRunner.query(`CREATE UNIQUE INDEX "UQ_users_email" ON "users" ("email")`);
     await queryRunner.query(`CREATE UNIQUE INDEX "UQ_users_username" ON "users" ("username")`);
+        await queryRunner.query(
+      `CREATE INDEX "IDX_sessions_active" ON "sessions" ("jti") WHERE "revoked_at" IS NULL`,
+    );
+
+    // categories
+    await queryRunner.query(`
+      CREATE TABLE "categories" (
+        "id" SERIAL NOT NULL,
+        "name" varchar(150) NOT NULL,
+        "slug" varchar(160) NOT NULL,
+        "created_at" timestamptz NOT NULL DEFAULT now(),
+        CONSTRAINT "PK_categories" PRIMARY KEY ("id")
+      )
+    `);
+    await queryRunner.query(`CREATE UNIQUE INDEX "UQ_categories_slug" ON "categories" ("slug")`);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`DROP TABLE IF EXISTS "users"`);
+    await queryRunner.query(`DROP TABLE IF EXISTS "categories"`);
   }
 }

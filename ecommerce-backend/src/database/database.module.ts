@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../modules/users/entities/user.entity';
 import { Session } from '../modules/sessions/entities/session.entity';
+import { Category } from '../modules/categories/entities/category.entity';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { Session } from '../modules/sessions/entities/session.entity';
         username: config.get<string>('database.username'),
         password: config.get<string>('database.password'),
         database: config.get<string>('database.database'),
-        entities: [User, Session],
+        entities: [User, Session, Category],
         synchronize: false,
         logging: config.get<boolean>('database.logging'),
         ssl: config.get<boolean>('database.ssl') ? { rejectUnauthorized: false } : false,

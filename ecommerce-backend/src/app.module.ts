@@ -13,6 +13,7 @@ import { HealthModule } from './modules/health/health.module';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
+import { CategoriesModule } from './modules/categories/categories.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { AllExceptionsFilter } from './common/filters/http-exception.filter';
     UsersModule,
     SessionsModule,
     HealthModule,
+    CategoriesModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },
