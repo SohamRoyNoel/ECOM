@@ -1,0 +1,652 @@
+{
+  "info": {
+    "_postman_id": "d9b99405-5db1-45be-90c7-6e9d2e9e43ba",
+    "name": "ECom",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "9279148"
+  },
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Login - username",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Parse the response body",
+                  "const response = pm.response.json();",
+                  "",
+                  "// Check if login was successful",
+                  "if (response?.accessToken) {",
+                  "    ",
+                  "    // Set the access token as a collection variable",
+                  "    pm.collectionVariables.set(\"access_token\", `Bearer ${response.accessToken}`);",
+                  "    ",
+                  "    console.log(\"✅ Access token saved to collection variables\");",
+                  "} else {",
+                  "    console.log(\"❌ Login failed, token not saved\");",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "access_token",
+                "value": "{{access_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"identifier\": \"bob\",\n    \"password\": \"Password@2026\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL}}/auth/login",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Parse the response body",
+                  "const response = pm.response.json();",
+                  "",
+                  "// Check if login was successful",
+                  "if (response?.accessToken) {",
+                  "    ",
+                  "    // Set the access token as a collection variable",
+                  "    pm.collectionVariables.set(\"access_token\", `Bearer ${response.accessToken}`);",
+                  "    ",
+                  "    console.log(\"Access token saved to collection variables\");",
+                  "} else {",
+                  "    console.log(\"❌ Login failed, token not saved\");",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "access_token",
+                "value": "{{access_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"identifier\": \"bob@demo.local\",\n    \"password\": \"Password@2026\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL}}/auth/login",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Me",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Parse the response body",
+                  "const response = pm.response.json();",
+                  "",
+                  "// Check if login was successful",
+                  "if (response?.accessToken) {",
+                  "    ",
+                  "    // Set the access token as a collection variable",
+                  "    pm.collectionVariables.set(\"access_token\", `Bearer ${response.accessToken}`);",
+                  "    ",
+                  "    console.log(\"✅ Access token saved to collection variables\");",
+                  "} else {",
+                  "    console.log(\"❌ Login failed, token not saved\");",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{access_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/auth/me",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "Get Categories",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Parse the response body",
+                  "const response = pm.response.json();",
+                  "",
+                  "// Check if login was successful",
+                  "if (response?.accessToken) {",
+                  "    ",
+                  "    // Set the access token as a collection variable",
+                  "    pm.collectionVariables.set(\"access_token\", `Bearer ${response.accessToken}`);",
+                  "    ",
+                  "    console.log(\"✅ Access token saved to collection variables\");",
+                  "} else {",
+                  "    console.log(\"❌ Login failed, token not saved\");",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{access_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/categories",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Get Product by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Parse the response body",
+                  "const response = pm.response.json();",
+                  "",
+                  "// Check if login was successful",
+                  "if (response?.accessToken) {",
+                  "    ",
+                  "    // Set the access token as a collection variable",
+                  "    pm.collectionVariables.set(\"access_token\", `Bearer ${response.accessToken}`);",
+                  "    ",
+                  "    console.log(\"✅ Access token saved to collection variables\");",
+                  "} else {",
+                  "    console.log(\"❌ Login failed, token not saved\");",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{access_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/products/22",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "products",
+                "22"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Products - Default",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Parse the response body",
+                  "const response = pm.response.json();",
+                  "",
+                  "// Check if login was successful",
+                  "if (response?.accessToken) {",
+                  "    ",
+                  "    // Set the access token as a collection variable",
+                  "    pm.collectionVariables.set(\"access_token\", `Bearer ${response.accessToken}`);",
+                  "    ",
+                  "    console.log(\"✅ Access token saved to collection variables\");",
+                  "} else {",
+                  "    console.log(\"❌ Login failed, token not saved\");",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{access_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/products",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Products - Custom Limit",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Parse the response body",
+                  "const response = pm.response.json();",
+                  "",
+                  "// Check if login was successful",
+                  "if (response?.accessToken) {",
+                  "    ",
+                  "    // Set the access token as a collection variable",
+                  "    pm.collectionVariables.set(\"access_token\", `Bearer ${response.accessToken}`);",
+                  "    ",
+                  "    console.log(\"✅ Access token saved to collection variables\");",
+                  "} else {",
+                  "    console.log(\"❌ Login failed, token not saved\");",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{access_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/products?limit=100",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "100"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Products - Category ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Parse the response body",
+                  "const response = pm.response.json();",
+                  "",
+                  "// Check if login was successful",
+                  "if (response?.accessToken) {",
+                  "    ",
+                  "    // Set the access token as a collection variable",
+                  "    pm.collectionVariables.set(\"access_token\", `Bearer ${response.accessToken}`);",
+                  "    ",
+                  "    console.log(\"✅ Access token saved to collection variables\");",
+                  "} else {",
+                  "    console.log(\"❌ Login failed, token not saved\");",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{access_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/products?categoryId=2",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "categoryId",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Products - Next Cursor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Parse the response body",
+                  "const response = pm.response.json();",
+                  "",
+                  "// Check if login was successful",
+                  "if (response?.accessToken) {",
+                  "    ",
+                  "    // Set the access token as a collection variable",
+                  "    pm.collectionVariables.set(\"access_token\", `Bearer ${response.accessToken}`);",
+                  "    ",
+                  "    console.log(\"✅ Access token saved to collection variables\");",
+                  "} else {",
+                  "    console.log(\"❌ Login failed, token not saved\");",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{access_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/products?cursor=eyJsYXN0SWQiOiIxMDAiLCJvcmdhbmljT2Zmc2V0IjoxMDB9",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "cursor",
+                  "value": "eyJsYXN0SWQiOiIxMDAiLCJvcmdhbmljT2Zmc2V0IjoxMDB9"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Products - Search",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Parse the response body",
+                  "const response = pm.response.json();",
+                  "",
+                  "// Check if login was successful",
+                  "if (response?.accessToken) {",
+                  "    ",
+                  "    // Set the access token as a collection variable",
+                  "    pm.collectionVariables.set(\"access_token\", `Bearer ${response.accessToken}`);",
+                  "    ",
+                  "    console.log(\"✅ Access token saved to collection variables\");",
+                  "} else {",
+                  "    console.log(\"❌ Login failed, token not saved\");",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{access_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/products?q=electrical",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "electrical"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Health",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "access_token",
+            "value": "{{access_token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"subtaskId\": \"sub5ss\",\n    \"subtaskTitle\": \"dSPuto nikel\",\n    \"subtaskDetails\": \"Hulo\",\n    \"priority\": \"HIGH\",\n    \"subtaskStatus\": \"TODO\",\n    \"dueDate\": \"2026-06-21T19:29:41.555832\",\n    \"startDate\": \"2026-06-21T19:29:41.555832\",\n    \"estimatedTime\": \"1h\",\n    \"actualTimeSpent\": \"2h\",\n    \"tags\": \"TASK\",\n    \"level\": \"TASK\",\n    \"category\": \"TASK\",\n    \"color\": \"GRAY\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL}}/health",
+          "host": [
+            "{{URL}}"
+          ],
+          "path": [
+            "health"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "URL",
+      "value": ""
+    },
+    {
+      "key": "access_token",
+      "value": ""
+    },
+    {
+      "key": "bearer_token_0sh3",
+      "secret": true
+    },
+    {
+      "key": "supabase_service_role_api_key_10lx",
+      "secret": true
+    }
+  ]
+}
