@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# E-commerce Catalog Frontend
 
-## Getting Started
+A **Next.js + TypeScript** frontend for the e-commerce catalog, featuring authentication, product browsing, search, filtering, and infinite scrolling. Communicates with the NestJS backend.
 
-First, run the development server:
+## Tech Stack
+- Next.js
+- TypeScript
+- React Context
+- Fetch API
+- Plain CSS
 
+## Running
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.local.example .env.local
+npm run dev -- -p 3001
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Frontend: `http://localhost:3001`
+- Requires the backend to be running first.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
+- User login with JWT authentication.
+- Product catalog with:
+  - Search (debounced)
+  - Category filter
+  - Adjustable page size
+  - Infinite scrolling (`IntersectionObserver`)
+- Sponsored products highlighted with a badge and disabled links.
+- Automatic redirect to login on unauthorized access.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## State Management
+- React Context for authentication.
+- Local `useState` for catalog state (search, filters, pagination, products).
 
-## Learn More
+## Authentication
+- JWT stored in `localStorage`.
+- Automatically logs out and redirects on session expiration (`401`).
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
+- `/login` – Authentication page.
+- `/products` – Product catalog with search, filters, and infinite scrolling.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Future Improvements
+- Product detail page.
+- Loading skeletons.
+- Migrate data fetching to SWR or React Query for scalability.

@@ -1,2 +1,0 @@
-### ENHANCEMENTS
-- Refresh token implementation
