@@ -39,7 +39,7 @@ echo "Database is reachable."
 # migrations in its own table), so this is safe to run on every restart.
 # ---------------------------------------------------------------------
 echo "Running database migrations..."
-node ./node_modules/typeorm/cli.js migration:run -d dist/database/data-source.js
+node ./node_modules/typeorm/cli.js migration:run -d dist/database/data-source.js --transaction all
 
 echo "Migrations complete. Starting application..."
 exec "$@"
