@@ -1,15 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { MoreThan, Repository } from 'typeorm';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
+import { DataSource, MoreThan, Repository } from 'typeorm';
 import { ProductView } from '../../common/interfaces/productView';
 import { Product } from './entities/product.entity';
 import { ProductListResponse } from '../../common/interfaces/productListResponse';
 import { QueryProductsDto } from './dto/query-products.dto';
-import { decodeBrowseCursor, encodeBrowseCursor } from '../../common/utils/cursor.util';
+import { decodeBrowseCursor, decodeSearchCursor, encodeBrowseCursor, encodeSearchCursor } from '../../common/utils/cursor.util';
+import { CONSTANTS } from '../../common/CONSTANTS';
 
 @Injectable()
 export class ProductsService {
   constructor(
+    @InjectDataSource() private readonly dataSource: DataSource,
     @InjectRepository(Product) private readonly productRepository: Repository<Product>,
   ) {}
 
@@ -27,7 +29,101 @@ export class ProductsService {
   async findPage(dto: QueryProductsDto): Promise<ProductListResponse> {
     const limit = dto.limit ?? 20;
     const query = dto.q?.trim();
+        if (query) {
+      return this.findSearchPage(query, dto.categoryId, limit, dto.cursor);
+    }
     return this.findBrowsePage(dto.categoryId, limit, dto.cursor);
+  }
+
+  // Full-Text Search
+  // GIN index optimization
+  // Stemming support - Jumble words
+  // Trigram similarity fallback - Handles TYPO
+  // Fuzzy search
+  // deDup
+  // Summary: COmbined FTS and trigram
+  private async findSearchPage(
+    query: string,
+    categoryId: number | undefined,
+    limit: number,
+    cursor: string | undefined,
+  ): Promise<ProductListResponse> {
+    const { offset } = decodeSearchCursor(cursor);
+
+    const params: unknown[] = [query];
+    let categoryFilter = '';
+    if (categoryId) {
+      params.push(categoryId);
+      categoryFilter = `AND category_id = $${params.length}`;
+    }
+    const limitIndex = params.length + 1;
+    const offsetIndex = params.length + 2;
+    params.push(limit + 1, offset); // fetch one extra row to cheaply detect hasMore
+
+    const sql = `
+      WITH fts_matches AS (
+        SELECT id,
+               ts_rank(search_vector, websearch_to_tsquery('english', $1)) AS score,
+               1 AS source_rank
+        FROM products
+        WHERE search_vector @@ websearch_to_tsquery('english', $1)
+          AND is_active = true
+          ${categoryFilter}
+      ),
+      trgm_matches AS (
+        SELECT id,
+               GREATEST(similarity(name, $1), similarity(coalesce(description, ''), $1)) AS score,
+               2 AS source_rank
+        FROM products
+        WHERE (similarity(name, $1) > 0.25 OR similarity(coalesce(description, ''), $1) > 0.2)
+          AND is_active = true
+          ${categoryFilter}
+          AND id NOT IN (SELECT id FROM fts_matches)
+      ),
+      combined AS (
+        SELECT * FROM fts_matches
+        UNION ALL
+        SELECT * FROM trgm_matches
+      )
+      SELECT ${CONSTANTS.RAW_PRODUCT_COLUMNS}, combined.score AS score, combined.source_rank AS "sourceRank"
+      FROM combined
+      JOIN products p ON p.id = combined.id
+      JOIN categories c ON c.id = p.category_id
+      ORDER BY combined.source_rank ASC, combined.score DESC, p.id ASC
+      LIMIT $${limitIndex} OFFSET $${offsetIndex}
+    `;
+
+    const rows: any[] = await this.dataSource.query(sql, params);
+    const hasMore = rows.length > limit;
+    const page = rows.slice(0, limit);
+
+    const data: ProductView[] = page.map((row) => ({
+      id: row.id,
+      name: row.name,
+      description: row.description,
+      sku: row.sku,
+      categoryId: row.categoryId,
+      categoryName: row.categoryName,
+      price: row.price,
+      currency: row.currency,
+      stockQuantity: row.stockQuantity,
+      imageUrl: row.imageUrl,
+      createdAt: row.createdAt,
+      relevance: {
+        score: Number(row.score),
+        matchType: Number(row.sourceRank) === 1 ? 'full_text' : 'fuzzy_trigram',
+      },
+    }));
+
+    return {
+      data,
+      pagination: {
+        limit,
+        hasMore,
+        nextCursor: hasMore ? encodeSearchCursor({ offset: offset + limit }) : null,
+      },
+      meta: { mode: 'search', query, categoryId },
+    };
   }
 
   private async findBrowsePage(

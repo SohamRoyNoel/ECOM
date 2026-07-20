@@ -4,6 +4,9 @@ export interface BrowseCursor {
   lastId: string;
   organicOffset: number;
 }
+export interface SearchCursor {
+  offset: number;
+}
 
 function decode<T>(cursor: string): T {
   try {
@@ -33,4 +36,17 @@ export function decodeBrowseCursor(cursor: string | undefined): BrowseCursor {
 
 export function encodeBrowseCursor(payload: BrowseCursor): string {
   return encode(payload);
+}
+
+export function encodeSearchCursor(payload: SearchCursor): string {
+  return encode(payload);
+}
+
+export function decodeSearchCursor(cursor: string | undefined): SearchCursor {
+  if (!cursor) return { offset: 0 };
+  const decoded = decode<SearchCursor>(cursor);
+  if (typeof decoded.offset !== 'number' || decoded.offset < 0) {
+    throw new BadRequestException('Invalid pagination cursor.');
+  }
+  return decoded;
 }
