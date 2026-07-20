@@ -1,0 +1,244 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #1a1a1a;
+  background: #fafafa;
+}
+
+a {
+  color: inherit;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+}
+
+/* ---------- generic text helpers ---------- */
+
+.status-text {
+  color: #555;
+  font-size: 14px;
+}
+
+.error-text {
+  color: #b00020;
+  font-size: 14px;
+  background: #fdecea;
+  border: 1px solid #f5c2c2;
+  border-radius: 4px;
+  padding: 8px 12px;
+}
+
+.info-text {
+  color: #614700;
+  font-size: 14px;
+  background: #fff8e1;
+  border: 1px solid #ffe08a;
+  border-radius: 4px;
+  padding: 8px 12px;
+}
+
+.hint-text {
+  color: #777;
+  font-size: 13px;
+  margin-top: 24px;
+}
+
+/* ---------- login page ---------- */
+
+.login-container {
+  max-width: 380px;
+  margin-top: 64px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.login-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+}
+
+/* ---------- inputs & buttons ---------- */
+
+input,
+select,
+button {
+  font-size: 15px;
+  font-family: inherit;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+select {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 8px 16px;
+  border: 1px solid #1a1a1a;
+  background: #1a1a1a;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button.secondary {
+  background: #fff;
+  color: #1a1a1a;
+}
+
+/* ---------- products page ---------- */
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.topbar-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.controls input[type="text"] {
+  flex: 1 1 240px;
+}
+
+.controls label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.controls input[type="number"] {
+  width: 70px;
+}
+
+.product-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.product-card {
+  display: flex;
+  gap: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 12px;
+  background: #fff;
+  position: relative;
+}
+
+.product-card--sponsored {
+  border-color: #f0c040;
+  background: #fffdf5;
+}
+
+.badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #f0c040;
+  color: #3a2c00;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 3px;
+}
+
+.product-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+  background: #f0f0f0;
+}
+
+.product-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.product-name {
+  margin: 0 0 4px;
+  font-size: 16px;
+}
+
+.product-category {
+  margin: 0 0 4px;
+  font-size: 12px;
+  color: #777;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.product-price {
+  margin: 0 0 4px;
+  font-weight: 600;
+}
+
+.product-stock {
+  margin: 0 0 4px;
+  font-size: 12px;
+  color: #777;
+}
+
+.product-description {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #555;
+}
+
+.product-relevance {
+  margin: 6px 0 0;
+  font-size: 11px;
+  color: #999;
+  font-style: italic;
+}
+
+.sentinel {
+  text-align: center;
+  padding: 20px 0;
+  color: #777;
+  font-size: 14px;
+}
