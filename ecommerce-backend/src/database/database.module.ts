@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../modules/users/entities/user.entity';
 import { Session } from '../modules/sessions/entities/session.entity';
 import { Category } from '../modules/categories/entities/category.entity';
+import { Product } from '../modules/products/entities/product.entity';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { Category } from '../modules/categories/entities/category.entity';
         username: config.get<string>('database.username'),
         password: config.get<string>('database.password'),
         database: config.get<string>('database.database'),
-        entities: [User, Session, Category],
+        entities: [User, Session, Category, Product],
         synchronize: false,
         logging: config.get<boolean>('database.logging'),
         ssl: config.get<boolean>('database.ssl') ? { rejectUnauthorized: false } : false,

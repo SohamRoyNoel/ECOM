@@ -14,6 +14,7 @@ import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 import { CategoriesModule } from './modules/categories/categories.module';
+import { ProductsModule } from './modules/products/products.module';
 
 @Module({
   imports: [
@@ -29,7 +30,8 @@ import { CategoriesModule } from './modules/categories/categories.module';
     UsersModule,
     SessionsModule,
     HealthModule,
-    CategoriesModule
+    CategoriesModule,
+    ProductsModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },
