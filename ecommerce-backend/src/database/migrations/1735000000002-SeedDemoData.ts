@@ -12,7 +12,7 @@ export class SeedDemoData1735000000002 implements MigrationInterface {
   name = 'SeedDemoData1735000000002';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    // Users
+    // users
     const passwordHash = await argon2.hash(DEMO_PASSWORD, {
       type: argon2.argon2id,
       memoryCost: 19456,
@@ -72,11 +72,20 @@ export class SeedDemoData1735000000002 implements MigrationInterface {
         params,
       );
     }
+
+    // Sponsored items 
+    const sponsoredSkus = insertedSkus.filter((_, i) => i % 111 === 0).slice(0, 40);
+    for (let i = 0; i < sponsoredSkus.length; i++) {
+      await queryRunner.query(
+        `INSERT INTO "sponsored_items" ("product_id", "priority", "is_active")
+         SELECT "id", $2, true FROM "products" WHERE "sku" = $1`,
+        [sponsoredSkus[i], sponsoredSkus.length - i],
+      );
+    }
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`DELETE FROM "users"`);
     await queryRunner.query(`DELETE FROM "categories"`);
-    await queryRunner.query(`DELETE FROM "products"`);
   }
 }

@@ -7,7 +7,7 @@ RUN npm install
 
 COPY . .
 
-ARG NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
+ARG NEXT_PUBLIC_API_BASE_URL=http://localhost:3002/ecom/v1
 ENV NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
 
 RUN npm run build
